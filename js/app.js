@@ -16,6 +16,7 @@ $(document).ready(beginGame());
 function beginGame(){
     shuffleCards();
     setEventsListeners();
+    popAllCards();
     resetTimer();
     resetMoves();
 
@@ -53,15 +54,17 @@ function setEventsListeners(){
             }
         });
     }
+    
     //set up event listener for game restart
     restartButton.addEventListener('click' , function()
     {
-        beginGame();
+        location.reload();
     });
 }
 function popAllCards(){
-    flippedCards.pop();
-    flippedCards.pop();
+    while (flippedCards.length > 0 ){
+        flippedCards.pop();
+    }
 }
 //TODO:
 //+ add animation for cards that matched
