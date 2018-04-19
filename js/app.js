@@ -9,6 +9,7 @@ const deck = document.querySelector(".deck");
 let flippedCards = [];
 let moves_counter = 0;
 let seconds = 0, minutes = 0, hours = 0;
+cards = [...cards];
 
 $(document).ready(beginGame());
 
@@ -62,9 +63,7 @@ function setEventsListeners(){
     });
 }
 function popAllCards(){
-    while (flippedCards.length > 0 ){
-        flippedCards.pop();
-    }
+    flippedCards.length = 0;
 }
 //TODO:
 //+ add animation for cards that matched
