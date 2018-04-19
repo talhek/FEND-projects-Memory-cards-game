@@ -37,7 +37,7 @@ function shuffle(array) {
 
     return array;
 }
-
+//setup for event listeners on game creation
 function setEventsListeners(){
     //set up event listener for each card
     for (let i = 0; i < cards.length; i++){
@@ -54,43 +54,44 @@ function setEventsListeners(){
                 }
             }
         });
-    }
-    
+    }  
     //set up event listener for game restart
     restartButton.addEventListener('click' , function()
     {
         location.reload();
     });
 }
+//empty the open cards list
 function popAllCards(){
     flippedCards.length = 0;
 }
-//TODO:
-//+ add animation for cards that matched
+//two cards have matched
 function cardsMatched(){
-    for (let j = 0; j <=1 ; j++){
-        flippedCards[j].classList.remove("show", "open");
-        flippedCards[j].classList.add("match");
+    for (let j = 0; j < flippedCards.length ; j++){
+        flippedCards[j].classList.add("matched");
+        flippedCards[j].classList.remove("show" , "open");
     }
     popAllCards();
 }
 //TODO:
 //+ decrease star for unsuccessful try
-//+ add animation for cards that didn't match
+//+ disable cards on animation
 function cardsNotMatching(){
-    //flippedCards[0].classList.add("unmatched");
-    //flippedCards[1].classList.add("unmatched");
+    flippedCards[0].classList.add("unmatched");
+    flippedCards[1].classList.add("unmatched");
+    setTimeout(function(){
+        flippedCards[0].classList.remove("show", "open","unmatched");
+        flippedCards[1].classList.remove("show", "open","unmatched");
+        popAllCards();
+    },1500);
 
-    flippedCards[0].classList.remove("shown" , "open");
-    flippedCards[1].classList.remove("shown" , "open");
-    popAllCards();
 
 }
 //flips a card and shows its symbol
 function flipCard(card){
     card.classList.toggle("open");
     card.classList.toggle("show");
-    card.classList.toggle("disabled");
+  //  card.classList.toggle("disabled");
 }
 //add to a list of previously opened cards
 function addToFlippedCards(cardToAdd){
@@ -106,7 +107,6 @@ function shuffleCards(){
 }
 
 //Creates the game 'timer'(stopwatch).
-//TODO: time to begin on gameplay only (currently happens after restarts)
 function startTimer(){
     setInterval(function(){
         timer.innerHTML =  minutes+":"+ seconds;
