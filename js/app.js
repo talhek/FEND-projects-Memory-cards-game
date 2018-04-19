@@ -1,5 +1,4 @@
 //TODO:
-//+ decrease star for unsuccessful try
 //+ display modal on winning game
 
 
@@ -11,6 +10,8 @@ const restartButton = document.querySelector(".restart");
 let cards = document.getElementsByClassName("card");
 const deck = document.querySelector(".deck");
 let gameOver_popup = document.querySelector("#congratsModal"); 
+let stars = document.querySelectorAll(".fa-star");
+
 
 //vars
 let flippedCards = [];
@@ -23,23 +24,20 @@ $(document).ready(beginGame());
 //starts a fresh game
 function beginGame(){
 
-    formatTime();
     //reset previous data
     resetMoves();
     popAllCards();
-    
+    formatStarRatings();
+    formatTime();
     //setup new deck
     shuffleCards();
-
     //initialize eventlisteners
     setEventsListeners();
 
 
 }
-function formatTime(){
-    document.querySelector("#seconds").innerHTML = "00";
-    document.querySelector("#minutes").innerHTML = "00";
-}
+
+
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -86,23 +84,12 @@ function cardsMatched(){
         flippedCards[j].classList.remove("show" , "open");
     }
     matches_counter++;
-    console.log(matches_counter);
     if (matches_counter == 8){
-        gameWon();
+        gameOver();
     }
     popAllCards();
 }
-function pauseCardsSelection(){
-    for (let i = 0; i < cards.length; i++){
-        cards[i].classList.add("paused");
-    }
-}
-function resumeCardsSelection(){
-    for (let i = 0; i < cards.length; i++){
-        cards[i].classList.remove("paused");
-    }
-}
-
+//cards selected didn't match, handle and show animation
 function cardsNotMatching(){
     flippedCards[0].classList.add("unmatched");
     flippedCards[1].classList.add("unmatched");
@@ -112,9 +99,29 @@ function cardsNotMatching(){
         flippedCards[1].classList.remove("show", "open","unmatched");
         resumeCardsSelection();
         popAllCards();
-    },1300);
+    },900);
 
 }
+/*pause selection for *all* cards on the deck
+* so cardsNotMatching() could finish its flow
+* without the user selecting another card in
+* the middle
+*/ 
+function pauseCardsSelection(){
+    for (let i = 0; i < cards.length; i++){
+        cards[i].classList.add("paused");
+    }
+}
+/*resumes selection functionality for *all* 
+* cards on the deck as the animation for 
+* the set that didn't match finished
+*/ 
+function resumeCardsSelection(){
+    for (let i = 0; i < cards.length; i++){
+        cards[i].classList.remove("paused");
+    }
+}
+
 //flips a card and shows its symbol
 function flipCard(card){
     card.classList.add("open", "show", "paused");
@@ -132,6 +139,7 @@ function shuffleCards(){
     }
 }
 
+//timer function from https://stackoverflow.com/questions/5517597/plain-count-up-timer-in-javascript
 //Creates the game 'timer'(stopwatch)
 function startTimer(){
 
@@ -145,7 +153,15 @@ function startTimer(){
         $("#minutes").html(pad(parseInt(sec/60,10)));
     }, 1000);
 }
-
+function formatStarRatings(){
+    for (let i = 0; i < stars.length; i++){
+        stars[i].style.color = "#FFD700";
+    }
+}
+function formatTime(){
+    document.querySelector("#seconds").innerHTML = "00";
+    document.querySelector("#minutes").innerHTML = "00";
+}
 //Resets moves data
 function resetMoves(){
     moves_counter = 0;
@@ -156,16 +172,31 @@ function popAllCards(){
 }
 //Increase moves counter 
 function incPlayerMoves(){
+    
     moves_counter++;
     moves.innerHTML = moves_counter;
-    if(moves_counter == 1)
+
+    if(moves_counter == 1){
     startTimer();
+    }
+    if(moves_counter >=9 && moves_counter <= 12){
+        stars[2].style.color = "#000000";
+    }
+    if(moves_counter >=13 && moves_counter <= 15){
+        stars[1].style.color = "#000000";
+    }
+    if(moves_counter >=16 && moves_counter <= 18){
+        stars[0].style.color = "#000000";
+    }
+    if(moves_counter > 19){
+        gameOver();
+    }
 
 }
 
 //game won, displaying modal info
-function gameWon(){
-    console.log("game won!");
+function gameOver(){
+    console.log("game over! won?");
     clearInterval(interVal1);
     congratsModal.style.display = "block";
 }
