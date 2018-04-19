@@ -77,8 +77,20 @@ h1 {
 
 .deck .card.match {
     cursor: default;
+    animation: anim-match;
+    animation-duration: 0.5s;
     background: #02ccba;
     font-size: 33px;
+}
+
+.deck .card.unmatched {
+    animation: anim-noMatch;
+    animation-duration: 0.5s;
+    background: #df1616;
+}
+.deck .card.paused {
+	pointer-events: none;
+	opacity: 1;
 }
 
 /*
@@ -112,20 +124,6 @@ h1 {
     padding-left: 60px;
 }
 
-
-.deck .card.unmatched {
-    animation: anim-noMatch;
-    animation-duration: 0.5s;
-    background: #af4be9;
-}
-
-.deck .card.matched{
-    animation: anim-match;
-    animation-duration: 0.5s;
-    background: #02ccba;
-    font-size: 30px;
-
-}
 
 @keyframes anim-match {
 	from {
@@ -170,4 +168,20 @@ h1 {
 	to {
 		transform: scale3d(1, 1, 1);
 	}
+}
+
+.modal{
+	position: fixed;
+	font-family: Arial, Helvetica, sans-serif;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,0.8);
+	z-index: 99999;
+	opacity:0;
+	-webkit-transition: opacity 400ms ease-in;
+	-moz-transition: opacity 400ms ease-in;
+	transition: opacity 400ms ease-in;
+	pointer-events: none;
 }
