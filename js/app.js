@@ -5,11 +5,13 @@ const timer = document.querySelector(".timer");
 const restartButton = document.querySelector(".restart");
 let cards = document.getElementsByClassName("card");
 const deck = document.querySelector(".deck");
+let gameOver_popup = document.querySelector("#congratsModal"); 
 //vars
 let flippedCards = [];
-let moves_counter = 0;
+let moves_counter = 0 , matches_counter = 0;
 let seconds = 0, minutes = 0, hours = 0;
 cards = [...cards];
+let interVal1;
 
 $(document).ready(beginGame());
 
@@ -61,15 +63,17 @@ function setEventsListeners(){
         location.reload();
     });
 }
-//empty the open cards list
-function popAllCards(){
-    flippedCards.length = 0;
-}
+
 //two cards have matched
 function cardsMatched(){
     for (let j = 0; j < flippedCards.length ; j++){
         flippedCards[j].classList.add("matched");
         flippedCards[j].classList.remove("show" , "open");
+    }
+    matches_counter++;
+    console.log(matches_counter);
+    if (matches_counter == 8){
+        gameWon();
     }
     popAllCards();
 }
@@ -108,7 +112,7 @@ function shuffleCards(){
 
 //Creates the game 'timer'(stopwatch).
 function startTimer(){
-    setInterval(function(){
+     interVal1 = setInterval(function(){
         timer.innerHTML =  minutes+":"+ seconds;
         seconds++;
         if(seconds == 60){
@@ -132,6 +136,10 @@ function resetTimer(){
 function resetMoves(){
     moves_counter = 0;
 }
+//empty the open cards list
+function popAllCards(){
+    flippedCards.length = 0;
+}
 //Increase moves counter 
 function incMoves(){
     moves_counter++;
@@ -141,3 +149,9 @@ function incMoves(){
 
 }
 
+//game won, displaying modal info
+function gameWon(){
+    console.log("game won!");
+    clearInterval(interVal1);
+    congratsModal.style.display = "block";
+}
