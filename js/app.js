@@ -1,15 +1,20 @@
+//TODO:
+//+ decrease star for unsuccessful try
+//+ display modal on winning game
 
-// *selectors
+
+
+
+// selectors
 const moves = document.querySelector(".moves");
-const timer = document.querySelector(".timer");
 const restartButton = document.querySelector(".restart");
 let cards = document.getElementsByClassName("card");
 const deck = document.querySelector(".deck");
 let gameOver_popup = document.querySelector("#congratsModal"); 
+
 //vars
 let flippedCards = [];
 let moves_counter = 0 , matches_counter = 0;
-let seconds = 0, minutes = 0, hours = 0;
 cards = [...cards];
 let interVal1;
 
@@ -17,9 +22,9 @@ $(document).ready(beginGame());
 
 //starts a fresh game
 function beginGame(){
-    
+
+    formatTime();
     //reset previous data
-    resetTimer();
     resetMoves();
     popAllCards();
     
@@ -31,7 +36,10 @@ function beginGame(){
 
 
 }
-
+function formatTime(){
+    document.querySelector("#seconds").innerHTML = "00";
+    document.querySelector("#minutes").innerHTML = "00";
+}
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -94,8 +102,7 @@ function resumeCardsSelection(){
         cards[i].classList.remove("paused");
     }
 }
-//TODO:
-//+ decrease star for unsuccessful try
+
 function cardsNotMatching(){
     flippedCards[0].classList.add("unmatched");
     flippedCards[1].classList.add("unmatched");
@@ -110,9 +117,7 @@ function cardsNotMatching(){
 }
 //flips a card and shows its symbol
 function flipCard(card){
-    card.classList.toggle("open");
-    card.classList.toggle("show");
-    card.classList.toggle("paused");
+    card.classList.add("open", "show", "paused");
 }
 //add to a list of previously opened cards
 function addToFlippedCards(cardToAdd){
@@ -127,28 +132,20 @@ function shuffleCards(){
     }
 }
 
-//Creates the game 'timer'(stopwatch).
+//Creates the game 'timer'(stopwatch)
 function startTimer(){
-     interVal1 = setInterval(function(){
-        timer.innerHTML =  minutes+":"+ seconds;
-        seconds++;
-        if(seconds == 60){
-            minutes++;
-            seconds=0;
-        }
-        if(minutes == 60){
-            hours++;
-            minutes = 0;
-        }
+
+    let sec = 0;
+    function pad(val)
+    { 
+        return val > 9 ? val : "0" + val; 
+    }
+    interVal1 = setInterval( function(){
+        $("#seconds").html(pad(++sec % 60));
+        $("#minutes").html(pad(parseInt(sec/60,10)));
     }, 1000);
 }
-//Resets timer data
-function resetTimer(){
-    seconds = 0;
-    minutes = 0;
-    hours = 0;
-    timer.innerHTML = "0:0";
-}
+
 //Resets moves data
 function resetMoves(){
     moves_counter = 0;
