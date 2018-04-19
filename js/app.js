@@ -17,11 +17,18 @@ $(document).ready(beginGame());
 
 //starts a fresh game
 function beginGame(){
-    shuffleCards();
-    setEventsListeners();
-    popAllCards();
+    
+    //reset previous data
     resetTimer();
     resetMoves();
+    popAllCards();
+    
+    //setup new deck
+    shuffleCards();
+
+    //initialize eventlisteners
+    setEventsListeners();
+
 
 }
 
@@ -47,7 +54,7 @@ function setEventsListeners(){
             flipCard(e.target);
             addToFlippedCards(e.currentTarget);
             if (flippedCards.length > 1){
-                incMoves();
+                incPlayerMoves();
                 if (flippedCards[0].type === flippedCards[1].type){
                     cardsMatched();
                 }
@@ -67,7 +74,7 @@ function setEventsListeners(){
 //two cards have matched
 function cardsMatched(){
     for (let j = 0; j < flippedCards.length ; j++){
-        flippedCards[j].classList.add("matched");
+        flippedCards[j].classList.add("match");
         flippedCards[j].classList.remove("show" , "open");
     }
     matches_counter++;
@@ -77,25 +84,35 @@ function cardsMatched(){
     }
     popAllCards();
 }
+function pauseCardsSelection(){
+    for (let i = 0; i < cards.length; i++){
+        cards[i].classList.add("paused");
+    }
+}
+function resumeCardsSelection(){
+    for (let i = 0; i < cards.length; i++){
+        cards[i].classList.remove("paused");
+    }
+}
 //TODO:
 //+ decrease star for unsuccessful try
-//+ disable cards on animation
 function cardsNotMatching(){
     flippedCards[0].classList.add("unmatched");
     flippedCards[1].classList.add("unmatched");
+    pauseCardsSelection();
     setTimeout(function(){
         flippedCards[0].classList.remove("show", "open","unmatched");
         flippedCards[1].classList.remove("show", "open","unmatched");
+        resumeCardsSelection();
         popAllCards();
-    },1500);
-
+    },1300);
 
 }
 //flips a card and shows its symbol
 function flipCard(card){
     card.classList.toggle("open");
     card.classList.toggle("show");
-  //  card.classList.toggle("disabled");
+    card.classList.toggle("paused");
 }
 //add to a list of previously opened cards
 function addToFlippedCards(cardToAdd){
@@ -141,7 +158,7 @@ function popAllCards(){
     flippedCards.length = 0;
 }
 //Increase moves counter 
-function incMoves(){
+function incPlayerMoves(){
     moves_counter++;
     moves.innerHTML = moves_counter;
     if(moves_counter == 1)
