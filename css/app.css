@@ -207,3 +207,53 @@ h1 {
     text-decoration: none;
     cursor: pointer;
 }
+
+
+@media screen and (max-width: 320px) {
+	.deck {
+		width: 80%;
+	}
+	.deck .card {
+		height: 4.5rem;
+		width: 4.5rem;
+	}
+}
+@media screen and (min-width: 321px) and (max-width: 650px)
+{
+    .container {
+		font-size: 15px;
+	}
+
+	.deck {
+		width: 450px;
+		height: 500px;
+	}
+
+	.deck .card {
+		height: 90px;
+		width: 90px;
+	}
+
+	.modal {
+		width: 30%;
+	}
+}
+@media (min-width: 695px) {
+	.container {
+		font-size: 22px;
+	}
+
+	.deck {
+		width: 630px;
+		height: 650px;
+	}
+
+	.deck .card {
+		height: 120px;
+		width: 120px;
+	}
+
+	.modal {
+		width: 50%;
+	}
+}
