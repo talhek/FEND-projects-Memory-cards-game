@@ -1,8 +1,3 @@
-//TODO:
-//+ display modal on winning game
-
-
-
 
 // selectors
 const moves = document.querySelector(".moves");
@@ -18,6 +13,7 @@ let flippedCards = [];
 let moves_counter = 0 , matches_counter = 0;
 cards = [...cards];
 let interVal1;
+let gameWon = false;
 
 $(document).ready(beginGame());
 
@@ -85,6 +81,7 @@ function cardsMatched(){
     }
     matches_counter++;
     if (matches_counter == 8){
+        gameWon = true;
         gameOver();
     }
     popAllCards();
@@ -172,7 +169,7 @@ function popAllCards(){
 }
 //Increase moves counter 
 function incPlayerMoves(){
-    
+
     moves_counter++;
     moves.innerHTML = moves_counter;
 
@@ -189,6 +186,7 @@ function incPlayerMoves(){
         stars[0].style.color = "#000000";
     }
     if(moves_counter > 19){
+        gameWon = false;
         gameOver();
     }
 
@@ -196,7 +194,37 @@ function incPlayerMoves(){
 
 //game won, displaying modal info
 function gameOver(){
-    console.log("game over! won?");
+    let modal = document.getElementById('congratsModal');
+    let modalStats = document.querySelector(".modalStats");
+    let modalHeader = document.querySelector(".modalHeader");
+    let modalClose = document.querySelector(".modalClose");
+    modalClose.addEventListener('click', function(){
+        pauseCardsSelection();
+        modal.style.display = "none";
+    })
+    if (gameWon){
+        modalHeader.innerHTML = "YOU WON!!!!!!";
+    }
+    else {
+        modalHeader.innerHTML = "Shame, try again?";
+    }
+    gameStats(modalStats); 
     clearInterval(interVal1);
-    congratsModal.style.display = "block";
+
+    modal.style.display = "block";
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            pauseCardsSelection();
+            modal.style.display = "none";
+        }
+    }
+}
+//prints the game statistics
+function gameStats(modalStats){
+    modalStats.innerHTML = "Your time: " +
+    document.querySelector("#minutes").innerHTML +
+    " Minutes and " +
+     document.querySelector("#seconds").innerHTML +
+     " Seconds. " +
+    " Total number of moves : " + moves_counter;    
 }
