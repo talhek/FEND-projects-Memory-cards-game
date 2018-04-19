@@ -86,7 +86,7 @@ h1 {
 .deck .card.unmatched {
     animation: anim-noMatch;
     animation-duration: 0.5s;
-    background: #df1616;
+    background: #773caf;
 }
 .deck .card.paused {
 	pointer-events: none;
