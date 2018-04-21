@@ -13,7 +13,7 @@ let flippedCards = [];
 let moves_counter = 0 , matches_counter = 0;
 cards = [...cards];
 let interVal1;
-let gameWon = false;
+let skills = 'Excellent!';
 
 $(document).ready(beginGame());
 
@@ -81,7 +81,6 @@ function cardsMatched(){
     }
     matches_counter++;
     if (matches_counter == 8){
-        gameWon = true;
         gameOver();
     }
     popAllCards();
@@ -178,16 +177,11 @@ function incPlayerMoves(){
     }
     if(moves_counter >=9 && moves_counter <= 12){
         stars[2].style.color = "#000000";
+        skills='Good job!';
     }
     if(moves_counter >=13 && moves_counter <= 15){
         stars[1].style.color = "#000000";
-    }
-    if(moves_counter >=16 && moves_counter <= 18){
-        stars[0].style.color = "#000000";
-    }
-    if(moves_counter > 19){
-        gameWon = false;
-        gameOver();
+        skills = "Don't give up!";
     }
 
 }
@@ -195,20 +189,16 @@ function incPlayerMoves(){
 //game won, displaying modal info
 function gameOver(){
     let modal = document.getElementById('congratsModal');
-    let modalStats = document.querySelector(".modalStats");
-    let modalHeader = document.querySelector(".modalHeader");
     let modalClose = document.querySelector(".modalClose");
+    let modalRestart = document.querySelector(".modalRestart");
     modalClose.addEventListener('click', function(){
         pauseCardsSelection();
         modal.style.display = "none";
     })
-    if (gameWon){
-        modalHeader.innerHTML = "YOU WON!!!!!!";
-    }
-    else {
-        modalHeader.innerHTML = "Shame, try again?";
-    }
-    gameStats(modalStats); 
+    modalRestart.addEventListener('click', function(){
+        location.reload();
+    });
+    gameStats(); 
     clearInterval(interVal1);
 
     modal.style.display = "block";
@@ -220,8 +210,13 @@ function gameOver(){
     }
 }
 //prints the game statistics
-function gameStats(modalStats){
-    modalStats.innerHTML = "Your time: " +
+function gameStats(){
+    let modalStats = document.querySelector(".modalStats");
+    let modalHeader = document.querySelector(".modalHeader");
+
+    modalHeader.innerHTML = "YOU WON!!!!!!";
+    modalStats.innerHTML = "Game rating: " + skills +
+    "Your time: " +
     document.querySelector("#minutes").innerHTML +
     " Minutes and " +
      document.querySelector("#seconds").innerHTML +
